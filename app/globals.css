@@ -1,0 +1,109 @@
+:root {
+  --bg: #0b0f17;
+  --panel: #131a26;
+  --panel-2: #1a2434;
+  --border: #243044;
+  --text: #e6edf6;
+  --muted: #8a9bb3;
+  --accent: #4f8cff;
+  --accent-2: #34d399;
+  --warn: #fbbf24;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+a { color: var(--accent); }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+header.top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+header.top h1 { font-size: 24px; margin: 0; }
+header.top .tag { color: var(--muted); font-size: 14px; }
+
+.llm-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--panel);
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot.on { background: var(--accent-2); }
+.dot.off { background: var(--warn); }
+
+.grid { display: grid; gap: 16px; }
+.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.cols-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 860px) { .cols-3, .cols-2 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+.card h2 { margin: 0 0 6px; font-size: 16px; }
+.card p.desc { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+
+.worker-step { font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+
+button {
+  font: inherit; cursor: pointer; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--panel-2); color: var(--text); padding: 8px 14px;
+  transition: background .15s, border-color .15s;
+}
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #061226; font-weight: 600; }
+button.primary:hover { background: #6ea0ff; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+input, select {
+  font: inherit; background: var(--panel-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; width: 100%;
+}
+label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+
+.row { display: flex; gap: 8px; align-items: center; }
+.row > * { flex: 1; }
+.row.tight > button { flex: 0 0 auto; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 13px;
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 999px; padding: 4px 10px; margin: 0 6px 6px 0;
+}
+.chip button { padding: 0 4px; border: none; background: none; color: var(--muted); }
+
+section.block { margin-top: 28px; }
+section.block > h2 { font-size: 18px; margin: 0 0 12px; }
+
+.article {
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px;
+  background: var(--panel);
+}
+.article .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--panel-2); border: 1px solid var(--border); }
+.badge.cat { color: var(--accent); }
+.badge.done { color: var(--accent-2); }
+.badge.todo { color: var(--warn); }
+.article h3 { margin: 8px 0 6px; font-size: 15px; }
+.article .summary { color: var(--text); font-size: 14px; }
+.article .path { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+pre.pub {
+  white-space: pre-wrap; background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px; font-size: 13px; max-height: 360px; overflow: auto;
+}
+
+.muted { color: var(--muted); }
+.log { font-family: ui-monospace, monospace; font-size: 12px; color: var(--accent-2); min-height: 18px; }
+.empty { color: var(--muted); font-size: 14px; padding: 8px 0; }

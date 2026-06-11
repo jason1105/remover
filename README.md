@@ -31,3 +31,43 @@
     - 这样的工人可以有多个, 将文章分享到不同的平台.
 
 
+
+---
+
+## Web App 实现 (Next.js · 可部署到 Vercel)
+
+本仓库在上述需求基础上实现了一个**内容聚合发布流水线**的 Web 仪表盘，覆盖三个工人：
+
+| 工人 | 路由 | 说明 |
+| --- | --- | --- |
+| 收集帖子 | `POST /api/collect` | 按主题抓取热门文章地址，用 LLM 分类，保存到当天「文件夹」(articles.txt)，按分类保留 N 篇 |
+| 处理帖子 | `POST /api/process` | 抓取正文，用中文总结、整篇翻译，生成 `<date>-<title>` 子目录与封面图 |
+| 发布文章 | `POST /api/publish` | 整理已处理文章，生成汇总(摘要+原文链接)，发布到不同平台(微信/小红书) |
+| 定时全流程 | `GET /api/cron` | Vercel Cron 每天串联执行 收集→处理→发布 |
+
+前端是 `/` 的单页仪表盘，可配置：采集主题、语言、每日开始时间、分类保留数、内容源与分类。
+
+### LLM 变量 (按需配置)
+LLM 通过环境变量接入，**未配置时使用模拟输出**，流水线仍可完整演示：
+
+```
+LLM_API_KEY    # 提供商 API Key（必填才会调用真实模型）
+LLM_BASE_URL   # OpenAI 兼容地址，默认 https://api.openai.com/v1
+LLM_MODEL      # 模型名，默认 gpt-4o-mini
+CRON_SECRET    # 可选，保护定时任务接口
+```
+见 `.env.example`。
+
+### 本地运行
+```bash
+npm install
+cp .env.example .env.local   # 按需填入 LLM_API_KEY
+npm run dev                  # http://localhost:3000
+```
+
+### 部署到 Vercel
+1. 在 Vercel 导入本 GitHub 仓库（自动识别 Next.js）。
+2. 在 Project Settings → Environment Variables 配置上面的 LLM 变量。
+3. Deploy；`vercel.json` 已配置每日 Cron 触发 `/api/cron`。
+
+> 注意：演示用内存存储在 Serverless 下不持久。生产环境请把 `lib/store.ts` 换成 KV / 数据库实现。
