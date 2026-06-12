@@ -15,7 +15,8 @@
  */
 
 const API_KEY = process.env.LLM_API_KEY;
-const BASE_URL = process.env.LLM_BASE_URL || "https://api.openai.com/v1";
+// 去掉结尾多余的斜杠，避免拼出 `//chat/completions` 导致 404。
+const BASE_URL = (process.env.LLM_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
 const MODEL = process.env.LLM_MODEL || "gpt-4o-mini";
 
 export function llmConfigured(): boolean {
