@@ -188,7 +188,17 @@ export default function Page() {
 
       {/* Articles */}
       <section className="block">
-        <h2>文章库 ({s.articles.length})</h2>
+        <div className="row tight" style={{ alignItems: "center" }}>
+          <h2 style={{ margin: 0 }}>文章库 ({s.articles.length})</h2>
+          <button
+            disabled={!!busy || s.articles.length === 0}
+            onClick={() => {
+              if (confirm("确定清空文章库和发布记录吗？")) call("清空", "/api/reset");
+            }}
+          >
+            清空文章库
+          </button>
+        </div>
         {s.articles.length === 0 && <p className="empty">还没有文章，点击「运行收集」开始。</p>}
         {s.articles.map((a) => (
           <div className="article" key={a.id}>
@@ -240,5 +250,6 @@ function summarize(label: string, data: any): string {
   if (label === "收集") return `✓ 收集完成：新增 ${data.addedCount} 篇 (${data.date})`;
   if (label.startsWith("处理")) return `✓ 处理完成：${data.processedCount} 篇已生成摘要`;
   if (label === "发布") return `✓ 已发布到 ${data.publication.platform}：${data.publication.title}`;
+  if (label === "清空") return "✓ 已清空文章库与发布记录";
   return "✓ 完成";
 }

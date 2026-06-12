@@ -3,8 +3,8 @@
  *
  * The README's hard problem — "如何根据一个主题选择最热门的文章" — is handled
  * here by pulling ranked stories from Hacker News (no API key required) and
- * filtering by the configured topic. If outbound network is unavailable we
- * fall back to a small sample set so the pipeline still works offline.
+ * filtering by the configured topic. If the fetch fails or returns nothing,
+ * an empty list is returned (no placeholder data).
  */
 
 export type FetchedItem = {
@@ -12,14 +12,6 @@ export type FetchedItem = {
   url: string;
   points?: number;
 };
-
-const SAMPLE: FetchedItem[] = [
-  { title: "How large language models actually reason", url: "https://example.com/llm-reasoning", points: 420 },
-  { title: "Building reliable systems with Rust", url: "https://example.com/rust-reliable", points: 311 },
-  { title: "A founder's guide to early distribution", url: "https://example.com/distribution", points: 256 },
-  { title: "The hidden cost of microservices", url: "https://example.com/microservices", points: 198 },
-  { title: "Vector databases explained", url: "https://example.com/vector-db", points: 176 },
-];
 
 /** Fetch popular recent stories matching a topic, ranked by popularity. */
 export async function fetchPopular(topic: string, limit: number): Promise<FetchedItem[]> {
@@ -31,15 +23,13 @@ export async function fetchPopular(topic: string, limit: number): Promise<Fetche
     );
     if (!res.ok) throw new Error(`HN ${res.status}`);
     const data = await res.json();
-    const items: FetchedItem[] = (data?.hits ?? [])
+    return (data?.hits ?? [])
       .filter((h: any) => h.url && h.title)
       .map((h: any) => ({ title: h.title as string, url: h.url as string, points: h.points ?? 0 }))
       .sort((a: FetchedItem, b: FetchedItem) => (b.points ?? 0) - (a.points ?? 0))
       .slice(0, limit);
-    if (items.length > 0) return items;
-    throw new Error("no hits");
   } catch {
-    return SAMPLE.slice(0, limit);
+    return [];
   }
 }
 

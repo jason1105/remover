@@ -67,7 +67,7 @@ function seed(): DB {
       { id: "s2", name: "Lobsters", url: "https://lobste.rs", language: "en" },
     ],
     categories: ["人工智能", "软件工程", "创业商业"],
-    rules: { language: "en", retention: 100, topic: "AI 与软件工程", startHour: 8 },
+    rules: { language: "en", retention: 100, topic: "AI", startHour: 8 },
     articles: [],
     publications: [],
   };
