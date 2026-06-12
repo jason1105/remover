@@ -68,6 +68,10 @@ npm run dev                  # http://localhost:3000
 ### 部署到 Vercel
 1. 在 Vercel 导入本 GitHub 仓库（自动识别 Next.js）。
 2. 在 Project Settings → Environment Variables 配置上面的 LLM 变量。
-3. Deploy；`vercel.json` 已配置每日 Cron 触发 `/api/cron`。
+3. Deploy。
+
+> 定时全流程：`/api/cron` 路由已就绪，可被任意定时器触发。Vercel Cron Jobs 需要 Pro 计划，
+> 升级后在 `vercel.json` 中加入 `{ "crons": [{ "path": "/api/cron", "schedule": "0 0 * * *" }] }` 即可每日自动执行；
+> Hobby 计划可改用外部定时器（如 GitHub Actions / cron-job.org）定时请求该路由。
 
 > 注意：演示用内存存储在 Serverless 下不持久。生产环境请把 `lib/store.ts` 换成 KV / 数据库实现。
